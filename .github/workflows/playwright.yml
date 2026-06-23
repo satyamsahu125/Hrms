@@ -9,20 +9,20 @@ on:
 
 jobs:
   test:
-    timeout-minutes: 60
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
 
       # Payroll Application Setup
-      - name: Install Payroll dependencies
+      - name: Install Payroll Dependencies
         working-directory: ./Payroll-System
         run: npm ci
 
@@ -34,11 +34,11 @@ jobs:
         working-directory: ./Payroll-System
         run: npm run dev &
 
-      - name: Wait for Application
+      - name: Wait For Application
         run: npx wait-on http://localhost:5000
 
-      # Playwright Framework Setup
-      - name: Install Playwright dependencies
+      # Playwright Project Setup
+      - name: Install Root Dependencies
         run: npm ci
 
       - name: Install Playwright Browsers
