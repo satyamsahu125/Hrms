@@ -1,0 +1,12 @@
+<div class="d-flex justify-content-between mb-4">
+  <h4>Attendance Report</h4>
+  <a href="/reports/attendance?month=<%= month %>&year=<%= year %>&format=excel" class="btn btn-success btn-sm">Export Excel</a>
+</div>
+<div class="card"><div class="card-body table-responsive">
+  <table class="table data-table"><thead><tr><th>ID</th><th>Name</th><th>Date</th><th>Status</th><th>Check In</th><th>Check Out</th><th>Hours</th></tr></thead>
+  <tbody><% data.forEach(function(r) { %><tr>
+    <td><%= r.EmployeeID %></td><td><%= r.Name %></td><td><%= r.Date %></td><td><%= r.Status %></td>
+    <td><%= r.CheckIn %></td><td><%= r.CheckOut %></td><td><%= r.Hours %></td>
+  </tr><% }); %></tbody></table>
+</div></div>
+<script>$(document).ready(function() { $('.data-table').DataTable(); });</script>

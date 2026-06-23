@@ -1,0 +1,24 @@
+<div class="mb-4">
+  <h4><%= department.name %></h4>
+  <span class="badge bg-primary"><%= department.code %></span>
+</div>
+<div class="card">
+  <div class="card-header">Employees in <%= department.name %></div>
+  <div class="card-body">
+    <table class="table">
+      <thead><tr><th>ID</th><th>Name</th><th>Designation</th><th>Status</th></tr></thead>
+      <tbody>
+        <% employees.forEach(function(emp) { %>
+        <tr>
+          <td><%= emp.employeeId %></td>
+          <td><a href="/employees/<%= emp._id %>"><%= emp.firstName %> <%= emp.lastName %></a></td>
+          <td><%= emp.designation %></td>
+          <td><span class="badge bg-success"><%= emp.status %></span></td>
+        </tr>
+        <% }); %>
+        <% if (!employees.length) { %><tr><td colspan="4" class="text-muted">No employees</td></tr><% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<a href="/departments" class="btn btn-outline-secondary mt-3">Back</a>

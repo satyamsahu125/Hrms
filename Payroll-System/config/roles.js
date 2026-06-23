@@ -1,0 +1,20 @@
+const ROLES = {
+  SUPER_ADMIN: 'super_admin',
+  HR: 'hr',
+  MANAGER: 'manager',
+  EMPLOYEE: 'employee'
+};
+
+const ROLE_HIERARCHY = {
+  [ROLES.SUPER_ADMIN]: 4,
+  [ROLES.HR]: 3,
+  [ROLES.MANAGER]: 2,
+  [ROLES.EMPLOYEE]: 1
+};
+
+const ALL_ROLES = Object.values(ROLES);
+
+const ADMIN_ROLES = [ROLES.SUPER_ADMIN, ROLES.HR];
+const MANAGEMENT_ROLES = [ROLES.SUPER_ADMIN, ROLES.HR, ROLES.MANAGER];
+
+module.exports = { ROLES, ROLE_HIERARCHY, ALL_ROLES, ADMIN_ROLES, MANAGEMENT_ROLES };

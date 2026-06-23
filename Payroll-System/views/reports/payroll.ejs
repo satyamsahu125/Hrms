@@ -1,0 +1,16 @@
+<div class="d-flex justify-content-between mb-4 flex-wrap gap-2">
+  <h4>Payroll Report — <%= monthName %> <%= year %></h4>
+  <div class="d-flex gap-2">
+    <a href="/reports/payroll?month=<%= month %>&year=<%= year %>&format=excel" class="btn btn-success btn-sm"><i class="bi bi-file-excel"></i> Excel</a>
+    <a href="/reports/payroll?month=<%= month %>&year=<%= year %>&format=csv" class="btn btn-outline-success btn-sm">CSV</a>
+    <a href="/reports" class="btn btn-outline-secondary btn-sm">Back</a>
+  </div>
+</div>
+<div class="card"><div class="card-body table-responsive">
+  <table class="table data-table"><thead><tr><th>ID</th><th>Name</th><th>Gross</th><th>Deductions</th><th>Net</th><th>Status</th></tr></thead>
+  <tbody><% data.forEach(function(r) { %><tr>
+    <td><%= r.EmployeeID %></td><td><%= r.Name %></td><td>$<%= r.Gross.toLocaleString() %></td>
+    <td>$<%= r.Deductions.toLocaleString() %></td><td>$<%= r.Net.toLocaleString() %></td><td><%= r.Status %></td>
+  </tr><% }); %></tbody></table>
+</div></div>
+<script>$(document).ready(function() { $('.data-table').DataTable(); });</script>

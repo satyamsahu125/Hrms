@@ -1,0 +1,88 @@
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+  <h4 class="mb-0">Payroll — <%= monthName %> <%= year %></h4>
+  <% if (user && ['super_admin','hr'].includes(user.role)) { %>
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#generateModal"><i class="bi bi-gear"></i> Generate</button>
+    <form action="/payroll/bulk-approve" method="POST" class="d-inline">
+      <%- include('../partials/csrf') %>
+      <input type="hidden" name="month" value="<%= month %>">
+      <input type="hidden" name="year" value="<%= year %>">
+      <button type="submit" class="btn btn-success btn-sm">Bulk Approve</button>
+    </form>
+  </div>
+  <% } %>
+</div>
+
+<div class="row g-3 mb-4">
+  <% summary.forEach(function(s) { %>
+  <div class="col-md-3">
+    <div class="card stat-card">
+      <div class="card-body text-center">
+        <div class="text-muted small text-capitalize"><%= s._id %></div>
+        <h5><%= s.count %> records</h5>
+        <div class="text-primary">$<%= (s.total||0).toLocaleString() %></div>
+      </div>
+    </div>
+  </div>
+  <% }); %>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="GET" class="row g-2">
+      <div class="col-md-2"><select name="month" class="form-select">
+        <% for(let m=1;m<=12;m++) { %><option value="<%= m %>" <%= month===m?'selected':'' %>><%= m %></option><% } %>
+      </select></div>
+      <div class="col-md-2"><input type="number" name="year" class="form-control" value="<%= year %>"></div>
+      <div class="col-md-2"><button type="submit" class="btn btn-primary">Go</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-hover data-table">
+      <thead><tr><th>Employee</th><th>Gross</th><th>Deductions</th><th>Net</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        <% payrolls.forEach(function(p) { %>
+        <tr>
+          <td><%= p.employee ? p.employee.firstName + ' ' + p.employee.lastName : '-' %>
+            <br><small class="text-muted"><%= p.employee ? p.employee.employeeId : '' %></small></td>
+          <td>$<%= p.grossSalary.toLocaleString() %></td>
+          <td>$<%= p.totalDeductions.toLocaleString() %></td>
+          <td class="fw-semibold">$<%= p.netSalary.toLocaleString() %></td>
+          <td><span class="badge bg-<%= p.status === 'approved' || p.status === 'paid' ? 'success' : p.status === 'rejected' ? 'danger' : 'warning' %>"><%= p.status %></span></td>
+          <td>
+            <a href="/payroll/<%= p._id %>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+            <a href="/payroll/<%= p._id %>/slip" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-pdf"></i></a>
+            <% if (p.status === 'pending_approval' && user && ['super_admin','hr'].includes(user.role)) { %>
+            <form action="/payroll/<%= p._id %>/approve" method="POST" class="d-inline">
+              <%- include('../partials/csrf') %>
+              <input type="hidden" name="action" value="approve">
+              <button type="submit" class="btn btn-sm btn-success">✓</button>
+            </form>
+            <% } %>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal fade" id="generateModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form action="/payroll/generate" method="POST" class="modal-content">
+      <%- include('../partials/csrf') %>
+      <div class="modal-header"><h5>Generate Payroll</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <div class="mb-3"><label>Month</label><select name="month" class="form-select">
+          <% for(let m=1;m<=12;m++) { %><option value="<%= m %>"><%= m %></option><% } %>
+        </select></div>
+        <div class="mb-3"><label>Year</label><input type="number" name="year" class="form-control" value="<%= new Date().getFullYear() %>"></div>
+      </div>
+      <div class="modal-footer"><button type="submit" class="btn btn-primary">Generate</button></div>
+    </form>
+  </div>
+</div>
+<script>$(document).ready(function() { $('.data-table').DataTable(); });</script>

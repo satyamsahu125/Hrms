@@ -1,0 +1,36 @@
+<div class="mb-4 d-flex justify-content-between">
+  <h4>Attendance Calendar</h4>
+  <a href="/attendance" class="btn btn-outline-secondary">Back</a>
+</div>
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="GET" class="row g-2">
+      <div class="col-md-3"><select name="month" class="form-select">
+        <% for(let m=1;m<=12;m++) { %><option value="<%= m %>" <%= month===m?'selected':'' %>><%= m %></option><% } %>
+      </select></div>
+      <div class="col-md-2"><input type="number" name="year" class="form-control" value="<%= year %>"></div>
+      <div class="col-md-4"><select name="employee" class="form-select">
+        <% employees.forEach(function(e) { %>
+        <option value="<%= e._id %>" <%= selectedEmployee && selectedEmployee.toString() === e._id.toString() ? 'selected' : '' %>><%= e.firstName %> <%= e.lastName %></option>
+        <% }); %>
+      </select></div>
+      <div class="col-md-2"><button type="submit" class="btn btn-primary">View</button></div>
+    </form>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="row g-1 leave-calendar">
+      <% const daysInMonth = new Date(year, month, 0).getDate(); %>
+      <% for(let d=1; d<=daysInMonth; d++) {
+        const rec = records.find(r => new Date(r.date).getDate() === d);
+        const cls = rec ? rec.status : '';
+      %>
+      <div class="col-1 day-cell <%= cls %> text-center">
+        <strong><%= d %></strong><br>
+        <small><%= rec ? rec.status.substring(0,3) : '-' %></small>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>

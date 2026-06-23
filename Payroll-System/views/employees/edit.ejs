@@ -1,0 +1,42 @@
+<div class="mb-4"><h4>Edit Employee</h4></div>
+<div class="card">
+  <div class="card-body">
+    <form action="/employees/<%= employee._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <div class="row g-3">
+        <div class="col-md-6"><label class="form-label">First Name</label>
+          <input type="text" name="firstName" class="form-control" value="<%= employee.firstName %>" required></div>
+        <div class="col-md-6"><label class="form-label">Last Name</label>
+          <input type="text" name="lastName" class="form-control" value="<%= employee.lastName %>" required></div>
+        <div class="col-md-6"><label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" value="<%= employee.email %>" required></div>
+        <div class="col-md-6"><label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <% ['active','inactive','terminated','on_leave'].forEach(function(s) { %>
+            <option value="<%= s %>" <%= employee.status === s ? 'selected' : '' %>><%= s %></option>
+            <% }); %>
+          </select></div>
+        <div class="col-md-6"><label class="form-label">Department</label>
+          <select name="department" class="form-select" required>
+            <% departments.forEach(function(d) { %>
+            <option value="<%= d._id %>" <%= employee.department && employee.department.toString() === d._id.toString() ? 'selected' : '' %>><%= d.name %></option>
+            <% }); %>
+          </select></div>
+        <div class="col-md-6"><label class="form-label">Designation</label>
+          <input type="text" name="designation" class="form-control" value="<%= employee.designation %>"></div>
+        <% const sal = employee.salaryStructure || {}; %>
+        <div class="col-12"><hr><h6>Salary</h6></div>
+        <div class="col-md-4"><label class="form-label">Basic</label>
+          <input type="number" name="basicSalary" class="form-control" value="<%= sal.basicSalary || 0 %>"></div>
+        <div class="col-md-4"><label class="form-label">HRA</label>
+          <input type="number" name="hra" class="form-control" value="<%= sal.hra || 0 %>"></div>
+        <div class="col-md-4"><label class="form-label">DA</label>
+          <input type="number" name="da" class="form-control" value="<%= sal.da || 0 %>"></div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Update</button>
+          <a href="/employees/<%= employee._id %>" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

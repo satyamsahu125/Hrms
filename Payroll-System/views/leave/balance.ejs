@@ -1,0 +1,26 @@
+<div class="mb-4"><h4>Leave Balance</h4></div>
+<% if (balance) { %>
+<div class="card">
+  <div class="card-header"><%= balance.employee ? balance.employee.firstName + ' ' + balance.employee.lastName : 'Employee' %> — <%= balance.year %></div>
+  <div class="card-body">
+    <table class="table">
+      <thead><tr><th>Type</th><th>Allocated</th><th>Used</th><th>Remaining</th></tr></thead>
+      <tbody>
+        <% Object.keys(balance.balances).forEach(function(type) {
+          if (type === 'maternity' || type === 'paternity') return;
+        %>
+        <tr>
+          <td class="text-capitalize"><%= type.replace('_',' ') %></td>
+          <td><%= balance.balances[type] %></td>
+          <td><%= balance.used[type] || 0 %></td>
+          <td><strong><%= balance.balances[type] - (balance.used[type]||0) %></strong></td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% } else { %>
+<p class="text-muted">No leave balance found.</p>
+<% } %>
+<a href="/leave" class="btn btn-outline-secondary mt-3">Back</a>

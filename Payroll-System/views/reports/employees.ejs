@@ -1,0 +1,15 @@
+<div class="d-flex justify-content-between mb-4">
+  <h4>Employee Report</h4>
+  <div>
+    <a href="/reports/employees?format=excel" class="btn btn-success btn-sm">Excel</a>
+    <a href="/reports/employees?format=csv" class="btn btn-outline-success btn-sm">CSV</a>
+  </div>
+</div>
+<div class="card"><div class="card-body table-responsive">
+  <table class="table data-table"><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Department</th><th>Designation</th><th>Status</th></tr></thead>
+  <tbody><% data.forEach(function(r) { %><tr>
+    <td><%= r.EmployeeID %></td><td><%= r.Name %></td><td><%= r.Email %></td>
+    <td><%= r.Department %></td><td><%= r.Designation %></td><td><%= r.Status %></td>
+  </tr><% }); %></tbody></table>
+</div></div>
+<script>$(document).ready(function() { $('.data-table').DataTable(); });</script>

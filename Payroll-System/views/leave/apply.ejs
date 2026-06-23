@@ -1,0 +1,43 @@
+<div class="mb-4"><h4>Apply for Leave</h4></div>
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <form action="/leave/apply" method="POST">
+          <%- include('../partials/csrf') %>
+          <div class="mb-3">
+            <label class="form-label">Leave Type</label>
+            <select name="leaveType" class="form-select" required>
+              <% leaveTypes.forEach(function(t) { %>
+              <option value="<%= t %>"><%= t.replace('_',' ') %></option>
+              <% }); %>
+            </select>
+          </div>
+          <div class="mb-3"><label class="form-label">Start Date</label>
+            <input type="date" name="startDate" class="form-control" required></div>
+          <div class="mb-3"><label class="form-label">End Date</label>
+            <input type="date" name="endDate" class="form-control" required></div>
+          <div class="mb-3"><label class="form-label">Reason</label>
+            <textarea name="reason" class="form-control" rows="3" required></textarea></div>
+          <button type="submit" class="btn btn-primary">Submit Application</button>
+          <a href="/leave" class="btn btn-outline-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <% if (balance) { %>
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">Your Balance</div>
+      <div class="card-body">
+        <% ['annual','sick','casual'].forEach(function(t) { %>
+        <div class="d-flex justify-content-between py-2 border-bottom">
+          <span class="text-capitalize"><%= t %></span>
+          <strong><%= (balance.balances[t]||0) - (balance.used[t]||0) %> days left</strong>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+  <% } %>
+</div>

@@ -1,0 +1,45 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <i class="bi bi-building"></i>
+    <span><%= appName %></span>
+  </div>
+  <nav class="sidebar-nav flex-column">
+    <a href="/dashboard" class="nav-link <%= currentPath === '/dashboard' ? 'active' : '' %>">
+      <i class="bi bi-grid-1x2"></i> Dashboard
+    </a>
+    <% if (user && ['super_admin','hr','manager'].includes(user.role)) { %>
+    <a href="/employees" class="nav-link <%= currentPath.startsWith('/employees') ? 'active' : '' %>">
+      <i class="bi bi-people"></i> Employees
+    </a>
+    <a href="/departments" class="nav-link <%= currentPath.startsWith('/departments') ? 'active' : '' %>">
+      <i class="bi bi-diagram-3"></i> Departments
+    </a>
+    <% } %>
+    <a href="/attendance" class="nav-link <%= currentPath.startsWith('/attendance') ? 'active' : '' %>">
+      <i class="bi bi-clock-history"></i> Attendance
+    </a>
+    <a href="/leave" class="nav-link <%= currentPath.startsWith('/leave') ? 'active' : '' %>">
+      <i class="bi bi-calendar-check"></i> Leave
+    </a>
+    <a href="/payroll" class="nav-link <%= currentPath.startsWith('/payroll') ? 'active' : '' %>">
+      <i class="bi bi-cash-stack"></i> Payroll
+    </a>
+    <% if (user && ['super_admin','hr','manager'].includes(user.role)) { %>
+    <a href="/reports" class="nav-link <%= currentPath.startsWith('/reports') ? 'active' : '' %>">
+      <i class="bi bi-file-earmark-bar-graph"></i> Reports
+    </a>
+    <% } %>
+    <% if (user && ['super_admin','hr'].includes(user.role)) { %>
+    <a href="/settings" class="nav-link <%= currentPath.startsWith('/settings') ? 'active' : '' %>">
+      <i class="bi bi-gear"></i> Settings
+    </a>
+    <% } %>
+    <hr class="border-secondary opacity-25 mx-3">
+    <a href="/notifications" class="nav-link <%= currentPath.startsWith('/notifications') ? 'active' : '' %>">
+      <i class="bi bi-bell"></i> Notifications
+    </a>
+    <a href="/auth/logout" class="nav-link">
+      <i class="bi bi-box-arrow-right"></i> Logout
+    </a>
+  </nav>
+</aside>

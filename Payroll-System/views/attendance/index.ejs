@@ -1,0 +1,85 @@
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+  <h4 class="mb-0">Attendance</h4>
+  <div class="d-flex gap-2">
+    <form action="/attendance/check-in" method="POST" class="d-inline"><%- include('../partials/csrf') %><button type="submit" class="btn btn-success btn-sm"><i class="bi bi-box-arrow-in-right"></i> Check In</button></form>
+    <form action="/attendance/check-out" method="POST" class="d-inline"><%- include('../partials/csrf') %><button type="submit" class="btn btn-warning btn-sm"><i class="bi bi-box-arrow-right"></i> Check Out</button></form>
+    <a href="/attendance/calendar" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar3"></i> Calendar</a>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="GET" class="row g-2 align-items-end">
+      <div class="col-md-2"><label class="form-label">Month</label>
+        <select name="month" class="form-select">
+          <% for(let m=1;m<=12;m++) { %>
+          <option value="<%= m %>" <%= month === m ? 'selected' : '' %>><%= m %></option>
+          <% } %>
+        </select>
+      </div>
+      <div class="col-md-2"><label class="form-label">Year</label>
+        <input type="number" name="year" class="form-control" value="<%= year %>"></div>
+      <% if (user && ['super_admin','hr'].includes(user.role)) { %>
+      <div class="col-md-4"><label class="form-label">Employee</label>
+        <select name="employee" class="form-select">
+          <option value="">All</option>
+          <% employees.forEach(function(e) { %>
+          <option value="<%= e._id %>" <%= filters.employee == e._id ? 'selected' : '' %>><%= e.firstName %> <%= e.lastName %></option>
+          <% }); %>
+        </select>
+      </div>
+      <% } %>
+      <div class="col-md-2"><button type="submit" class="btn btn-primary">Filter</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body table-responsive">
+    <table class="table table-hover data-table">
+      <thead><tr><th>Date</th><th>Employee</th><th>Check In</th><th>Check Out</th><th>Hours</th><th>OT</th><th>Status</th>
+        <% if (user && ['super_admin','hr'].includes(user.role)) { %><th>Action</th><% } %>
+      </tr></thead>
+      <tbody>
+        <% records.forEach(function(r) { %>
+        <tr>
+          <td><%= new Date(r.date).toLocaleDateString() %></td>
+          <td><%= r.employee ? r.employee.firstName + ' ' + r.employee.lastName : '-' %></td>
+          <td><%= r.checkIn ? new Date(r.checkIn).toLocaleTimeString() : '-' %></td>
+          <td><%= r.checkOut ? new Date(r.checkOut).toLocaleTimeString() : '-' %></td>
+          <td><%= r.workHours || 0 %></td>
+          <td><%= r.overtimeHours || 0 %></td>
+          <td><span class="badge bg-<%= r.status === 'present' ? 'success' : r.status === 'late' ? 'warning' : 'secondary' %>"><%= r.status %></span></td>
+          <% if (user && ['super_admin','hr'].includes(user.role)) { %>
+          <td><button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#correct<%= r._id %>">Correct</button></td>
+          <% } %>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<% if (user && ['super_admin','hr'].includes(user.role)) { %>
+<% records.forEach(function(r) { %>
+<div class="modal fade" id="correct<%= r._id %>" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <form action="/attendance/correct" method="POST" class="modal-content">
+      <%- include('../partials/csrf') %>
+      <input type="hidden" name="id" value="<%= r._id %>">
+      <div class="modal-header"><h5 class="modal-title">Correct Attendance</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+      <div class="modal-body">
+        <select name="status" class="form-select mb-2">
+          <% ['present','absent','half_day','late','on_leave'].forEach(function(s) { %>
+          <option value="<%= s %>" <%= r.status === s ? 'selected' : '' %>><%= s %></option>
+          <% }); %>
+        </select>
+        <input type="text" name="notes" class="form-control" placeholder="Notes">
+      </div>
+      <div class="modal-footer"><button type="submit" class="btn btn-primary btn-sm">Save</button></div>
+    </form>
+  </div>
+</div>
+<% }); %>
+<% } %>
+<script>$(document).ready(function() { $('.data-table').DataTable(); });</script>

@@ -1,0 +1,60 @@
+<div class="mb-4"><h4>Settings</h4></div>
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header">Company Profile</div>
+      <div class="card-body">
+        <form action="/settings/company" method="POST">
+          <%- include('../partials/csrf') %>
+          <div class="mb-3"><label class="form-label">Company Name</label>
+            <input type="text" name="name" class="form-control" value="<%= company.name || '' %>"></div>
+          <div class="mb-3"><label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" value="<%= company.email || '' %>"></div>
+          <div class="mb-3"><label class="form-label">Phone</label>
+            <input type="text" name="phone" class="form-control" value="<%= company.phone || '' %>"></div>
+          <div class="mb-3"><label class="form-label">Address</label>
+            <textarea name="address" class="form-control" rows="2"><%= company.address || '' %></textarea></div>
+          <button type="submit" class="btn btn-primary">Save Company</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card mb-3">
+      <div class="card-header">Payroll Settings</div>
+      <div class="card-body">
+        <form action="/settings/payroll" method="POST">
+          <%- include('../partials/csrf') %>
+          <div class="mb-3"><label class="form-label">Pay Day (1-28)</label>
+            <input type="number" name="payDay" class="form-control" min="1" max="28" value="<%= payroll.payDay || 1 %>"></div>
+          <div class="mb-3"><label class="form-label">Default PF %</label>
+            <input type="number" name="defaultPf" class="form-control" value="<%= payroll.defaultPf || 12 %>"></div>
+          <div class="mb-3"><label class="form-label">Overtime Rate Multiplier</label>
+            <input type="number" name="overtimeMultiplier" step="0.1" class="form-control" value="<%= payroll.overtimeMultiplier || 1.5 %>"></div>
+          <button type="submit" class="btn btn-primary">Save Payroll</button>
+        </form>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Tax & Currency</div>
+      <div class="card-body">
+        <form action="/settings/tax" method="POST" class="mb-4">
+          <%- include('../partials/csrf') %>
+          <div class="mb-3"><label class="form-label">Default Tax %</label>
+            <input type="number" name="defaultTax" class="form-control" value="<%= tax.defaultTax || 10 %>"></div>
+          <button type="submit" class="btn btn-outline-primary btn-sm">Save Tax</button>
+        </form>
+        <form action="/settings/currency" method="POST">
+          <%- include('../partials/csrf') %>
+          <div class="row g-2">
+            <div class="col-6"><label class="form-label">Code</label>
+              <input type="text" name="code" class="form-control" value="<%= currency.code || 'USD' %>"></div>
+            <div class="col-6"><label class="form-label">Symbol</label>
+              <input type="text" name="symbol" class="form-control" value="<%= currency.symbol || '$' %>"></div>
+          </div>
+          <button type="submit" class="btn btn-outline-primary btn-sm mt-2">Save Currency</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

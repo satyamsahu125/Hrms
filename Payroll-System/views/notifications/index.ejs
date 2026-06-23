@@ -1,0 +1,32 @@
+<div class="d-flex justify-content-between mb-4">
+  <h4>Notifications</h4>
+  <form action="/notifications/read-all" method="POST">
+    <%- include('../partials/csrf') %>
+    <button type="submit" class="btn btn-outline-primary btn-sm">Mark all read</button>
+  </form>
+</div>
+<div class="card">
+  <div class="list-group list-group-flush">
+    <% if (notifications.length) { %>
+      <% notifications.forEach(function(n) { %>
+      <div class="list-group-item <%= n.isRead ? '' : 'bg-light' %>">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h6 class="mb-1"><%= n.title %></h6>
+            <p class="mb-1 text-muted"><%= n.message %></p>
+            <small class="text-muted"><%= new Date(n.createdAt).toLocaleString() %></small>
+          </div>
+          <% if (!n.isRead) { %>
+          <form action="/notifications/<%= n._id %>/read" method="POST">
+            <%- include('../partials/csrf') %>
+            <button type="submit" class="btn btn-sm btn-link">Mark read</button>
+          </form>
+          <% } %>
+        </div>
+      </div>
+      <% }); %>
+    <% } else { %>
+      <div class="list-group-item text-muted text-center py-5">No notifications</div>
+    <% } %>
+  </div>
+</div>
