@@ -210,8 +210,12 @@ export class EmployeePage {
   ) {
     await this.clickAddEmployee();
 
+    const options = await this.departmentDropdown.locator('option').allTextContents();
+
+console.log(options);
     await this.fillEmployeeForm(data);
 
+    
     if (createLogin) {
       await this.enableLoginAccount();
     }

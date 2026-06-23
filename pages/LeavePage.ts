@@ -25,6 +25,14 @@ export class LeavePage {
 
   // Form
 
+  private get startDateInput(): Locator {
+        return this.page.locator('input[name="startDate"]');
+    }
+
+    private get endDateInput(): Locator {
+        return this.page.locator('input[name="endDate"]');
+    }
+
   private get reasonTextArea(): Locator {
     return this.page.locator(
       'textarea[name="reason"]'
@@ -79,6 +87,9 @@ export class LeavePage {
 
   async applyLeave(reason: string) {
     await this.clickApplyLeave();
+    await this.startDateInput.fill('2026-06-15');
+
+    await this.endDateInput.fill('2026-06-15');
     await this.enterReason(reason);
     await this.submitLeave();
   }

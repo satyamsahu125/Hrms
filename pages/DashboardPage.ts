@@ -57,15 +57,16 @@ export class DashboardPage {
   // Profile Menu
 
   private get profileMenu(): Locator {
-  return this.page.locator(
-    'button[data-bs-toggle="dropdown"]'
-  );
+    return this.page.locator(
+        'button[data-bs-toggle="dropdown"]'
+    ).nth(1);
 }
+
 
   private get logoutLink(): Locator {
   return this.page.locator(
     'a[href="/auth/logout"]'
-  );
+  ).first();
 }
 
   // Methods

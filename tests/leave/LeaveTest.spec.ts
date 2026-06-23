@@ -20,7 +20,7 @@ test('Employee applies leave and admin approves successfully', async ({ page }) 
   );
 
   await expect(
-    page.getByText(/pending/i)
+    page.getByText(/pending/).first()
   ).toBeVisible();
 
   await dashboardPage.logout();
@@ -33,6 +33,6 @@ test('Employee applies leave and admin approves successfully', async ({ page }) 
   await leavePage.approveFirstLeave();
 
   await expect(
-    page.getByText(/approved/i)
+    page.getByText(/approved/i).first()
   ).toBeVisible();
 });
